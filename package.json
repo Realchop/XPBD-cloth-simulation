@@ -1,11 +1,14 @@
 {
   "name": "mehanika",
   "version": "1.0.0",
-  "description": "1) Skini node 2) git clone https://github.com/Realchop/mehanika.git 3) `npm i` (iz kloniranog direktorijuma)",
+  "description": "Cloth simulation",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "vite": "^5.2.9"
+  }
 }
