@@ -60,7 +60,7 @@ export class Point {
     down = null; // below neighbour
     left = null; // left neighbour
     right = null; // right neighbour
-    ctx; // canvas 2d drawing context
+    ctx; // canvas 2d drawing context (canvas je html element, ctx je vezan za canvas)
     drawSelf; // if points should be drawn
 
     constructor(x, y, r, ctx) {

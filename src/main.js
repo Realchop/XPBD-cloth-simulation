@@ -5,13 +5,13 @@ import { Point } from "./geometry";
 // Canvas setup
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
-canvas.width = window.innerWidth;
+canvas.width = window.innerWidth;  //rezolucija
 canvas.height = window.innerHeight;
 
 const numberOfPoints = 30;
 const r = 2;
 const clothSide = 500;
-const distanceCoef = clothSide/numberOfPoints;
+const distanceCoef = clothSide/numberOfPoints;  //zajebano
 const startX = (window.innerWidth-(distanceCoef*(numberOfPoints-1)))/2;
 const startY = (window.innerHeight-(distanceCoef*(numberOfPoints-1)))/2;
 
@@ -69,6 +69,9 @@ function animate(timestamp)
       previousTime = currentTime - (deltaTime % interval);
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+    //   rotateX(Math.PI/360);
+    //   rotateY(Math.PI/360);
+    //   rotateZ(Math.PI/360);
       for(const row of points)
       {
           for(const point of row)
@@ -93,9 +96,8 @@ function play() {
     if(!paused) animate();
 }
 
-// let sa idejom da se menja nekim inputom
-let deg = Math.PI/10;
-function rotateX() {
+// let sa idejom da se menja nekim inputom (NE MENJA SE)
+function rotateX(deg=Math.PI/10) {
     for(const row of points)
     {
         for(const point of row)
@@ -105,7 +107,7 @@ function rotateX() {
     }
 }
 
-function rotateY() {
+function rotateY(deg=Math.PI/10) {
     for(const row of points)
     {
         for(const point of row)
@@ -115,7 +117,7 @@ function rotateY() {
     }
 }
 
-function rotateZ() {
+function rotateZ(deg=Math.PI/10) {
     for(const row of points)
     {
         for(const point of row)
