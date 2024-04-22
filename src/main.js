@@ -131,7 +131,7 @@ function changeDirection() {
     deg *= -1;
 }
 
-const controlMapping = [play, rotateX, rotateY, rotateZ, changeDirection];
+const controlMapping = [play, () => rotateX(), () => rotateY(), () => rotateZ(), changeDirection];
 const controlsDiv = document.getElementById("controls");
 
 for(let i=0; i<controlsDiv.children.length; ++i)
