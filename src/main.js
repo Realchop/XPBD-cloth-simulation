@@ -73,9 +73,6 @@ function animate(timestamp)
       {
           for(const point of row)
           {
-            point.rotateX(Math.PI/60);
-            point.rotateY(Math.PI/60);
-            point.rotateZ(Math.PI/60);
             point.draw(drawPoints);
           }
       }
@@ -90,9 +87,55 @@ function animate(timestamp)
         ctx.fill();
     }
 }
-animate();
 
-document.body.addEventListener('click', () => {
+function play() {
     paused = !paused;
     if(!paused) animate();
-})
+}
+
+// let sa idejom da se menja nekim inputom
+let deg = Math.PI/10;
+function rotateX() {
+    for(const row of points)
+    {
+        for(const point of row)
+        {
+          point.rotateX(deg);
+        }
+    }
+}
+
+function rotateY() {
+    for(const row of points)
+    {
+        for(const point of row)
+        {
+          point.rotateY(deg);
+        }
+    }
+}
+
+function rotateZ() {
+    for(const row of points)
+    {
+        for(const point of row)
+        {
+          point.rotateZ(deg);
+        }
+    }
+}
+
+function changeDirection() {
+    deg *= -1;
+}
+
+const controlMapping = [play, rotateX, rotateY, rotateZ, changeDirection];
+const controlsDiv = document.getElementById("controls");
+
+for(let i=0; i<controlsDiv.children.length; ++i)
+{
+    controlsDiv.children[i].addEventListener("click", controlMapping[i]);
+}
+
+// Ovo mozemo i da maknemo
+animate();
