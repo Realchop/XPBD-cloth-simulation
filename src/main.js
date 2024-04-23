@@ -8,7 +8,7 @@ const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;  //rezolucija
 canvas.height = window.innerHeight;
 
-const numberOfPoints = 30;
+const numberOfPoints = 30;  //ukupno 900 tacaka
 const r = 2;
 const clothSide = 500;
 const distanceCoef = clothSide/numberOfPoints;  //zajebano
@@ -30,13 +30,21 @@ for(let i=0; i<numberOfPoints; ++i)
 {
     for(let j=0; j<numberOfPoints; ++j)
     {
-        if(i > 0)
-        {
-            points[i][j].left = points[i-1][j];
-        }
         if(j > 0)
         {
-            points[i][j].up = points[i][j-1];
+            points[i][j].left = points[i][j-1];
+        }
+        if(i > 0)
+        {
+            points[i][j].up = points[i-1][j];
+        }
+        if (j < numberOfPoints-1)
+        {
+            points[i][j].right = points[i][j+1];
+        }
+        if (i < numberOfPoints-1)
+        {
+            points[i][j].down = points[i+1][j];
         }
     }
 }
