@@ -46,16 +46,16 @@ export class Geometry {
         return this.cosCache[deg];
     }
 
-    rotations = new Map([
-        [Math.PI / 18, null],
-        [Math.PI / 6, null],
-        [Math.PI / 4, null],
-        [Math.PI / 3, null],
-        [Math.PI / 2, null],
-        [Math.PI, null]
-    ]);
+    rotations = new Map();
 
     initialize () {
+        this.rotations.set(Math.PI, null);
+        this.rotations.set(Math.PI / 2, null);
+        this.rotations.set(Math.PI / 3, null);
+        this.rotations.set(Math.PI / 4, null);
+        this.rotations.set(Math.PI / 6, null);
+        this.rotations.set(Math.PI / 18, null);
+
         let t_1 = [
             [ 1, 0, 0, window.innerWidth/2],
             [ 0, 1, 0, window.innerHeight/2],
@@ -107,8 +107,24 @@ export class Geometry {
                         axis.z = e;
                 }
             }
-            this.rotations[key] = axis;
+            this.rotations.set(key, axis);
         }
+    }
+
+    angleReduce (deg, axis) {
+        let degCopy = deg;
+        let comp = [];
+        let current = 0;
+        let angles = [Math.PI, Math.PI / 2, Math.PI / 3, Math.PI / 4, Math.PI / 6, Math.PI / 18];
+        while (deg - (Math.PI / 18) >= 0) {
+            if (deg - angles[current] >= 0) {
+                comp.push (this.rotations.get(angles[current])[axis]);
+                deg -= angles[current];
+            } else current++;
+        }
+        let res = comp[0];
+        for (let i=1; i<comp.length; ++i) res = this.matrixMul (res, comp[i]);
+        this.rotations.get(degCopy)[axis] = res;
     }
 
     constructor () {
@@ -148,13 +164,26 @@ export class Point {
     }
 
     rotateX(deg) {
-        let rotationMatrix = geometrySingleton.rotations[deg].x;
+        if(deg < 0 || deg > Math.PI * 2)
+            deg = (deg % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI);
+        if (!geometrySingleton.rotations.has(deg)) {
+            geometrySingleton.rotations.set(deg, {
+                x: null,
+                y: null,
+                z: null
+            });
+        }
+        if (!geometrySingleton.rotations.get(deg)["x"]) {
+            geometrySingleton.angleReduce(deg, "x");
+        }
+
+        let rotationMatrix = geometrySingleton.rotations.get(deg)["x"];
         let current = [
             [this.x],
             [this.y],
             [this.z],
             [1]
-        ]
+        ];
 
         let res = geometrySingleton.matrixMul(rotationMatrix, current);
         this.x = res[0][0];
@@ -163,7 +192,20 @@ export class Point {
     }
 
     rotateY(deg) {
-        let rotationMatrix = geometrySingleton.rotations[deg].y;
+        if(deg < 0 || deg > Math.PI * 2)
+            deg = (deg % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI);
+        if (!geometrySingleton.rotations.has(deg)) {
+            geometrySingleton.rotations.set(deg, {
+                x: null,
+                y: null,
+                z: null
+            })
+        }
+        if (!geometrySingleton.rotations.get(deg)["y"]) {
+            geometrySingleton.angleReduce(deg, "y");
+        }
+
+        let rotationMatrix = geometrySingleton.rotations.get(deg).y;
         let current = [
             [this.x],
             [this.y],
@@ -178,7 +220,20 @@ export class Point {
     }
 
     rotateZ(deg) {
-        let rotationMatrix = geometrySingleton.rotations[deg].z;
+        if(deg < 0 || deg > Math.PI * 2)
+            deg = (deg % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI);
+        if (!geometrySingleton.rotations.has(deg)) {
+            geometrySingleton.rotations.set(deg, {
+                x: null,
+                y: null,
+                z: null
+            })
+        }
+        if (!geometrySingleton.rotations.get(deg)["z"]) {
+            geometrySingleton.angleReduce(deg, "z");
+        }
+
+        let rotationMatrix = geometrySingleton.rotations.get(deg).z;
         let current = [
             [this.x],
             [this.y],

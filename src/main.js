@@ -22,7 +22,7 @@ for(let i=0; i<numberOfPoints; ++i)
     points.push([]);
     for(let j=0; j<numberOfPoints; ++j)
     {
-        points[i].push(new Point(startX+distanceCoef*i, startY+distanceCoef*j, r, ctx));
+        points[i].push(new Point(startX+distanceCoef*j, startY+distanceCoef*i, r, ctx));
     }
 }
 
@@ -81,7 +81,7 @@ function animate(timestamp)
       rotateX();
       rotateY();
       rotateZ();
-      
+
       for(const row of points)
       {
           for(const point of row)
@@ -107,7 +107,7 @@ function play() {
 }
 
 // let sa idejom da se menja nekim inputom (NE MENJA SE)
-function rotateX(deg=(Math.PI / 18)) {
+function rotateX(deg=Math.PI/18) {
     for(const row of points)
     {
         for(const point of row)
