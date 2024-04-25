@@ -9,7 +9,7 @@ canvas.width = window.innerWidth;  //rezolucija
 canvas.height = window.innerHeight;
 
 const numberOfPoints = 30;  //ukupno 900 tacaka
-const r = 2;
+const r = 2;  //poluprecnik tacke
 const clothSide = 500;
 const distanceCoef = clothSide/numberOfPoints;  //zajebano
 const startX = (window.innerWidth-(distanceCoef*(numberOfPoints-1)))/2;
@@ -77,9 +77,11 @@ function animate(timestamp)
       previousTime = currentTime - (deltaTime % interval);
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-    //   rotateX(Math.PI/360);
-    //   rotateY(Math.PI/360);
-    //   rotateZ(Math.PI/360);
+    
+      rotateX();
+      rotateY();
+      rotateZ();
+      
       for(const row of points)
       {
           for(const point of row)
@@ -105,7 +107,7 @@ function play() {
 }
 
 // let sa idejom da se menja nekim inputom (NE MENJA SE)
-function rotateX(deg=Math.PI/10) {
+function rotateX(deg=(Math.PI / 18)) {
     for(const row of points)
     {
         for(const point of row)
@@ -115,7 +117,7 @@ function rotateX(deg=Math.PI/10) {
     }
 }
 
-function rotateY(deg=Math.PI/10) {
+function rotateY(deg=Math.PI/18) {
     for(const row of points)
     {
         for(const point of row)
@@ -125,7 +127,7 @@ function rotateY(deg=Math.PI/10) {
     }
 }
 
-function rotateZ(deg=Math.PI/10) {
+function rotateZ(deg=Math.PI/18) {
     for(const row of points)
     {
         for(const point of row)

@@ -45,6 +45,76 @@ export class Geometry {
 
         return this.cosCache[deg];
     }
+
+    rotations = new Map([
+        [Math.PI / 18, null],
+        [Math.PI / 6, null],
+        [Math.PI / 4, null],
+        [Math.PI / 3, null],
+        [Math.PI / 2, null],
+        [Math.PI, null]
+    ]);
+
+    initialize () {
+        let t_1 = [
+            [ 1, 0, 0, window.innerWidth/2],
+            [ 0, 1, 0, window.innerHeight/2],
+            [ 0, 0, 1, 0],
+            [ 0, 0, 0, 1],
+        ];
+
+        let t = [
+            [ 1, 0, 0, -window.innerWidth/2],
+            [ 0, 1, 0, -window.innerHeight/2],
+            [ 0, 0, 1, 0],
+            [ 0, 0, 0, 1],
+        ];
+
+        let pos = [
+            [[1, 1], [1, 2], [2, 1], [2, 2]],
+            [[0, 0], [2, 0], [0, 2], [2, 2]],
+            [[0, 0], [0, 1], [1, 0], [1, 1]]
+        ]
+        for (let key of this.rotations.keys()) {
+            let axis = {
+                x: null,
+                y: null,
+                z: null
+            }
+            for (let i=0; i<3; ++i) {
+                let p = pos[i];
+                let e = [
+                    [1, 0, 0, 0],
+                    [0, 1, 0, 0],
+                    [0, 0, 1, 0],
+                    [0, 0, 0, 1]
+                ]
+                e[p[0][0]][p[0][1]] = this.cos(key);
+                e[p[1][0]][p[1][1]] = -this.sin(key);
+                e[p[2][0]][p[2][1]] = this.sin(key);
+                e[p[3][0]][p[3][1]] = this.cos(key);
+
+                e = this.matrixMul (t_1, e);
+                e = this.matrixMul (e, t);
+                switch (i) {
+                    case 0:
+                        axis.x = e;
+                        break;
+                    case 1:
+                        axis.y = e;
+                        break;
+                    case 2:
+                        axis.z = e;
+                }
+            }
+            this.rotations[key] = axis;
+        }
+    }
+
+    constructor () {
+        this.initialize();
+    }
+
 }
 
 // Ovo je jako cringe nacin da se ovo radi al ajde
@@ -61,7 +131,7 @@ export class Point {
     left = null; // left neighbour
     right = null; // right neighbour
     ctx; // canvas 2d drawing context (canvas je html element, ctx je vezan za canvas)
-    drawSelf; // if points should be drawn
+    drawSelf; // if points should be drawn (bool)
 
     constructor(x, y, r, ctx) {
         this.x = x;
@@ -78,27 +148,7 @@ export class Point {
     }
 
     rotateX(deg) {
-        let rotationMatrix = [
-            [1, 0, 0, 0],
-            [0, geometrySingleton.cos(deg), -geometrySingleton.sin(deg), 0],
-            [0, geometrySingleton.sin(deg), geometrySingleton.cos(deg), 0],
-            [0, 0, 0, 1]
-        ]
-
-        let t_1 = [
-            [ 1, 0, 0, window.innerWidth/2],
-            [ 0, 1, 0, window.innerHeight/2],
-            [ 0, 0, 1, 0],
-            [ 0, 0, 0, 1],
-        ]
-
-        let t = [
-            [ 1, 0, 0, -window.innerWidth/2],
-            [ 0, 1, 0, -window.innerHeight/2],
-            [ 0, 0, 1, 0],
-            [ 0, 0, 0, 1],
-        ]
-
+        let rotationMatrix = geometrySingleton.rotations[deg].x;
         let current = [
             [this.x],
             [this.y],
@@ -106,36 +156,14 @@ export class Point {
             [1]
         ]
 
-        let res1 = geometrySingleton.matrixMul(t_1, rotationMatrix);
-        let res2 = geometrySingleton.matrixMul(res1, t);
-        let res3 = geometrySingleton.matrixMul(res2, current);
-        this.x = res3[0][0];
-        this.y = res3[1][0];
-        this.z = res3[2][0];
+        let res = geometrySingleton.matrixMul(rotationMatrix, current);
+        this.x = res[0][0];
+        this.y = res[1][0];
+        this.z = res[2][0];
     }
 
     rotateY(deg) {
-        let rotationMatrix = [
-            [geometrySingleton.cos(deg), 0, geometrySingleton.sin(deg), 0],
-            [0, 1, 0, 0],
-            [-geometrySingleton.sin(deg), 0, geometrySingleton.cos(deg), 0],
-            [0, 0, 0, 1]
-        ]
-
-        let t_1 = [
-            [ 1, 0, 0, window.innerWidth/2],
-            [ 0, 1, 0, window.innerHeight/2],
-            [ 0, 0, 1, 0],
-            [ 0, 0, 0, 1],
-        ]
-
-        let t = [
-            [ 1, 0, 0, -window.innerWidth/2],
-            [ 0, 1, 0, -window.innerHeight/2],
-            [ 0, 0, 1, 0],
-            [ 0, 0, 0, 1],
-        ]
-
+        let rotationMatrix = geometrySingleton.rotations[deg].y;
         let current = [
             [this.x],
             [this.y],
@@ -143,36 +171,14 @@ export class Point {
             [1]
         ]
 
-        let res1 = geometrySingleton.matrixMul(t_1, rotationMatrix);
-        let res2 = geometrySingleton.matrixMul(res1, t);
-        let res3 = geometrySingleton.matrixMul(res2, current);
-        this.x = res3[0][0];
-        this.y = res3[1][0];
-        this.z = res3[2][0];
+        let res = geometrySingleton.matrixMul(rotationMatrix, current);
+        this.x = res[0][0];
+        this.y = res[1][0];
+        this.z = res[2][0];
     }
 
     rotateZ(deg) {
-        let t_1 = [
-            [ 1, 0, 0, window.innerWidth/2],
-            [ 0, 1, 0, window.innerHeight/2],
-            [ 0, 0, 1, 0],
-            [ 0, 0, 0, 1],
-        ]
-
-        let t = [
-            [ 1, 0, 0, -window.innerWidth/2],
-            [ 0, 1, 0, -window.innerHeight/2],
-            [ 0, 0, 1, 0],
-            [ 0, 0, 0, 1],
-        ]
-
-        let rotationMatrix = [
-            [geometrySingleton.cos(deg), -geometrySingleton.sin(deg), 0, 0],
-            [geometrySingleton.sin(deg), geometrySingleton.cos(deg), 0, 0],
-            [0, 0, 1, 0],
-            [0, 0, 0, 1],
-        ]
-
+        let rotationMatrix = geometrySingleton.rotations[deg].z;
         let current = [
             [this.x],
             [this.y],
@@ -180,12 +186,10 @@ export class Point {
             [1]
         ]
 
-        let res1 = geometrySingleton.matrixMul(t_1, rotationMatrix);
-        let res2 = geometrySingleton.matrixMul(res1, t);
-        let res3 = geometrySingleton.matrixMul(res2, current);
-        this.x = res3[0][0];
-        this.y = res3[1][0];
-        this.z = res3[2][0];
+        let res = geometrySingleton.matrixMul(rotationMatrix, current);
+        this.x = res[0][0];
+        this.y = res[1][0];
+        this.z = res[2][0];
     }
 
     draw(overrideDrawSelf=false) {
