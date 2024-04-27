@@ -5,13 +5,13 @@ import { Point } from "./geometry";
 // Canvas setup
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
-canvas.width = window.innerWidth;  //rezolucija
+canvas.width = window.innerWidth;  // rezolucija
 canvas.height = window.innerHeight;
 
-const numberOfPoints = 30;  //ukupno 900 tacaka
-const r = 2;  //poluprecnik tacke
+const numberOfPoints = 30;  // ukupno 900 tacaka
+const r = 2;  // poluprecnik tacke
 const clothSide = 500;
-const distanceCoef = clothSide/numberOfPoints;  //zajebano
+const distanceCoef = clothSide/numberOfPoints;
 const startX = (window.innerWidth-(distanceCoef*(numberOfPoints-1)))/2;
 const startY = (window.innerHeight-(distanceCoef*(numberOfPoints-1)))/2;
 
@@ -63,7 +63,6 @@ let deltaTime = 0;
 //                       END                          //
 // ************************************************** //
 
-// Diskutuj umesto ovog realtime pristupa pre render pristup
 function animate(timestamp)
 {
     if(paused) return;
@@ -106,7 +105,6 @@ function play() {
     if(!paused) animate();
 }
 
-// let sa idejom da se menja nekim inputom (NE MENJA SE)
 function rotateX(deg=Math.PI/18) {
     for(const row of points)
     {
@@ -149,5 +147,4 @@ for(let i=0; i<controlsDiv.children.length; ++i)
     controlsDiv.children[i].addEventListener("click", controlMapping[i]);
 }
 
-// Ovo mozemo i da maknemo
 animate();

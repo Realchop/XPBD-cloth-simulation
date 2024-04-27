@@ -159,7 +159,7 @@ export class Point {
     }
 
     updateSelf() {
-        // Ovde ide fizika recimo:
+        // Ovde ide fizika, recimo:
         // this.y -= this.g;
     }
 
