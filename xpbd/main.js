@@ -448,7 +448,8 @@ const controlMapping = [
     () => cameraRotateX(), 
     () => cameraRotateY(), 
     () => cameraRotateZ(), 
-    changeDirection];
+    changeDirection
+];
 const controlsDiv = document.getElementById("controls");
 
 for(let i=0; i<controlsDiv.children.length; ++i)
