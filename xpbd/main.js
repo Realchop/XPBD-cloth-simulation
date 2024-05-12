@@ -67,6 +67,7 @@ let paused = false;
 let showScreenCenter = false;
 let drawPoints = false;
 let drawConstraints = false;
+let outlineOnly = false;
 let framesPerSecond = 30;
 let startTime = performance.now();
 let previousTime = startTime;
@@ -290,7 +291,7 @@ function animate(timestamp)
         {
             for(const point of row)
             {
-                point.draw(drawPoints, drawConstraints, cameraMatrix=cameraMatrix);
+                point.draw(drawPoints, drawConstraints, cameraMatrix, outlineOnly);
             }
         }
 

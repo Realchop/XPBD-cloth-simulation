@@ -286,7 +286,7 @@ export class Point
         this.z = res[2][0];
     }
 
-    draw(overrideDrawSelf=false, drawConstraints=false, cameraMatrix=null) 
+    draw(overrideDrawSelf=false, drawConstraints=false, cameraMatrix=null, outline=false) 
     {
         if(!cameraMatrix)
             cameraMatrix = [
@@ -317,20 +317,26 @@ export class Point
             this.ctx.fill();
         }
 
-        if(this.up !== null)// && (this.left === null || this.right === null))
+        if(this.up !== null)
         {
-            this.ctx.beginPath();
-            this.ctx.moveTo(this.drawX, this.drawY);
-            this.ctx.lineTo(this.up.drawX, this.up.drawY);
-            this.ctx.stroke();
+            if(!outline || this.left === null || this.right === null)
+            {
+                this.ctx.beginPath();
+                this.ctx.moveTo(this.drawX, this.drawY);
+                this.ctx.lineTo(this.up.drawX, this.up.drawY);
+                this.ctx.stroke();
+            }
         }
 
-        if(this.left !== null)// && (this.up === null || this.down === null))
+        if(this.left !== null)
         {
-            this.ctx.beginPath();
-            this.ctx.moveTo(this.drawX, this.drawY);
-            this.ctx.lineTo(this.left.drawX, this.left.drawY);
-            this.ctx.stroke();
+            if(!outline || this.up === null || this.down === null)
+            {
+                this.ctx.beginPath();
+                this.ctx.moveTo(this.drawX, this.drawY);
+                this.ctx.lineTo(this.left.drawX, this.left.drawY);
+                this.ctx.stroke();
+            }
         }
 
         // Constraints
