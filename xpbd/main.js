@@ -1,5 +1,5 @@
 "use strict";
-import { Point } from "./geometry";
+import { Point, geometrySingleton } from "./geometry";
 
 
 // Canvas setup
@@ -66,11 +66,18 @@ for(let i=0; i<numberOfPoints; ++i)
 let paused = false;
 let showScreenCenter = false;
 let drawPoints = false;
+let drawConstraints = false;
 let framesPerSecond = 30;
 let startTime = performance.now();
 let previousTime = startTime;
 let currentTime = 0;
 let deltaTime = 0;
+let cameraMatrix = [
+    [1, 0, 0, 0],
+    [0, 1, 0, 0],
+    [0, 0, 1, 0],
+    [0, 0, 0, 1],
+]
 
 // Parametri
 const steps = 30;
@@ -283,7 +290,7 @@ function animate(timestamp)
         {
             for(const point of row)
             {
-                point.draw(drawPoints);
+                point.draw(drawPoints, drawConstraints, cameraMatrix=cameraMatrix);
             }
         }
 
@@ -340,12 +347,107 @@ function rotateZ(deg=Math.PI/18)
     }
 }
 
+function cameraRotateX(deg=Math.PI/18)
+{
+    deg *= direction;
+    if(deg < 0 || deg > Math.PI * 2)
+        deg = (deg % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI);
+
+    if (!geometrySingleton.rotations.has(deg)) {
+        geometrySingleton.rotations.set(deg, {
+            x: null,
+            y: null,
+            z: null
+        });
+    }
+
+    if (!geometrySingleton.rotations.get(deg)["x"]) {
+        geometrySingleton.angleReduce(deg, "x");
+    }
+    
+    let rotationMatrix = geometrySingleton.rotations.get(deg)["x"];
+    let res = geometrySingleton.matrixMul(rotationMatrix, cameraMatrix);
+    for(let i=0; i<res.length; ++i)
+    {
+        for(let j=0; j<res.length; ++j)
+        {
+            cameraMatrix[i][j] = res[i][j];
+        }
+    }
+}
+
+function cameraRotateY(deg=Math.PI/18)
+{
+    deg *= direction;
+    if(deg < 0 || deg > Math.PI * 2)
+        deg = (deg % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI);
+    
+    if (!geometrySingleton.rotations.has(deg)) {
+        geometrySingleton.rotations.set(deg, {
+            x: null,
+            y: null,
+            z: null
+        });
+    }
+    
+    if (!geometrySingleton.rotations.get(deg)["y"]) {
+        geometrySingleton.angleReduce(deg, "y");
+    }
+    
+    let rotationMatrix = geometrySingleton.rotations.get(deg)["y"];
+    let res = geometrySingleton.matrixMul(rotationMatrix, cameraMatrix);
+    for(let i=0; i<res.length; ++i)
+    {
+        for(let j=0; j<res.length; ++j)
+        {
+            cameraMatrix[i][j] = res[i][j];
+        }
+    }
+}
+
+function cameraRotateZ(deg=Math.PI/18)
+{
+    deg *= direction;
+    if(deg < 0 || deg > Math.PI * 2)
+        deg = (deg % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI);
+    
+    if (!geometrySingleton.rotations.has(deg)) {
+        geometrySingleton.rotations.set(deg, {
+            x: null,
+            y: null,
+            z: null
+        });
+    }
+    
+    if (!geometrySingleton.rotations.get(deg)["z"]) {
+        geometrySingleton.angleReduce(deg, "z");
+    }
+    
+    let rotationMatrix = geometrySingleton.rotations.get(deg)["z"];
+    let res = geometrySingleton.matrixMul(rotationMatrix, cameraMatrix);
+    for(let i=0; i<res.length; ++i)
+    {
+        for(let j=0; j<res.length; ++j)
+        {
+            cameraMatrix[i][j] = res[i][j];
+        }
+    }
+}
+
 function changeDirection() 
 {
     direction *= -1;
 }
 
-const controlMapping = [play, () => rotateX(), () => rotateY(), () => rotateZ(), changeDirection];
+const controlMapping = [
+    play, 
+    () => rotateX(), 
+    () => rotateY(), 
+    () => rotateZ(), 
+    () => cameraRotateX(), 
+    () => cameraRotateY(), 
+    () => cameraRotateZ(), 
+    changeDirection];
 const controlsDiv = document.getElementById("controls");
 
 for(let i=0; i<controlsDiv.children.length; ++i)

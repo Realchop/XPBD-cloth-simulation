@@ -135,7 +135,7 @@ export class Geometry
 }
 
 // Ovo je jako cringe nacin da se ovo radi al ajde
-const geometrySingleton = new Geometry();
+export const geometrySingleton = new Geometry();
 
 export class Point 
 {
@@ -154,6 +154,9 @@ export class Point
     previous;
     velocity;
     w; // inverse mass
+    drawX;
+    drawY;
+    drawZ;
 
     constructor(x, y, r, ctx, distanceCoef)
     {
@@ -171,6 +174,9 @@ export class Point
         this.velocity.y = 0.0;
         this.velocity.z = 0.0;
         this.w = 1.0;
+        this.drawX = x;
+        this.drawY = y;
+        this.drawZ = 0.0;
     }
     
     tiedNode() 
@@ -195,14 +201,16 @@ export class Point
     {
         if(deg < 0 || deg > Math.PI * 2)
             deg = (deg % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI);
-        if (!geometrySingleton.rotations.has(deg)) {
+        if (!geometrySingleton.rotations.has(deg)) 
+        {
             geometrySingleton.rotations.set(deg, {
                 x: null,
                 y: null,
                 z: null
             });
         }
-        if (!geometrySingleton.rotations.get(deg)["x"]) {
+        if (!geometrySingleton.rotations.get(deg)["x"]) 
+        {
             geometrySingleton.angleReduce(deg, "x");
         }
 
@@ -270,7 +278,7 @@ export class Point
             [this.y],
             [this.z],
             [1]
-        ]
+        ];
 
         let res = geometrySingleton.matrixMul(rotationMatrix, current);
         this.x = res[0][0];
@@ -278,30 +286,50 @@ export class Point
         this.z = res[2][0];
     }
 
-    draw(overrideDrawSelf=false, drawConstraints=false) 
+    draw(overrideDrawSelf=false, drawConstraints=false, cameraMatrix=null) 
     {
+        if(!cameraMatrix)
+            cameraMatrix = [
+                [1, 0, 0, 0],
+                [0, 1, 0, 0],
+                [0, 0, 1, 0],
+                [1, 0, 0, 1],
+            ];
+
+        let current = [
+            [this.x],
+            [this.y],
+            [this.z],
+            [1]
+        ];
+
+        let res = geometrySingleton.matrixMul(cameraMatrix, current);
+        this.drawX = res[0][0];
+        this.drawY = res[1][0];
+        this.drawZ = res[2][0];
+
         if(overrideDrawSelf || this.drawSelf)
         {
             // Posto ne koristimo z, to je implicitna projekcija
             // na ravan Oxy.
             this.ctx.beginPath();
-            this.ctx.arc(this.x, this.y, this.r, 0, Math.PI*2);
+            this.ctx.arc(this.drawX, this.drawY, this.r, 0, Math.PI*2);
             this.ctx.fill();
         }
 
         if(this.up !== null)// && (this.left === null || this.right === null))
         {
             this.ctx.beginPath();
-            this.ctx.moveTo(this.x, this.y);
-            this.ctx.lineTo(this.up.x, this.up.y);
+            this.ctx.moveTo(this.drawX, this.drawY);
+            this.ctx.lineTo(this.up.drawX, this.up.drawY);
             this.ctx.stroke();
         }
 
         if(this.left !== null)// && (this.up === null || this.down === null))
         {
             this.ctx.beginPath();
-            this.ctx.moveTo(this.x, this.y);
-            this.ctx.lineTo(this.left.x, this.left.y);
+            this.ctx.moveTo(this.drawX, this.drawY);
+            this.ctx.lineTo(this.left.drawX, this.left.drawY);
             this.ctx.stroke();
         }
 
@@ -312,16 +340,16 @@ export class Point
             if(this.down.left != null)
             {
                 this.ctx.beginPath();
-                this.ctx.moveTo(this.x, this.y);
-                this.ctx.lineTo(this.down.left.x, this.down.left.y);
+                this.ctx.moveTo(this.drawX, this.drawY);
+                this.ctx.lineTo(this.down.left.drawX, this.down.left.drawY);
                 this.ctx.stroke();
             }
             // crevno
             if(this.down.right != null)
             {
                 this.ctx.beginPath();
-                this.ctx.moveTo(this.x, this.y);
-                this.ctx.lineTo(this.down.right.x, this.down.right.y);
+                this.ctx.moveTo(this.drawX, this.drawY);
+                this.ctx.lineTo(this.down.right.drawX, this.down.right.drawY);
                 this.ctx.strokeStyle = "red";
                 this.ctx.stroke();
                 this.ctx.strokeStyle = "black";
@@ -330,8 +358,8 @@ export class Point
             if(this.down.down != null && this.down.down.left != null)
             {
                 this.ctx.beginPath();
-                this.ctx.moveTo(this.x, this.y);
-                this.ctx.lineTo(this.down.down.left.x, this.down.down.left.y);
+                this.ctx.moveTo(this.drawX, this.drawY);
+                this.ctx.lineTo(this.down.down.left.drawX, this.down.down.left.drawY);
                 this.ctx.strokeStyle = "green";
                 this.ctx.stroke();
                 this.ctx.strokeStyle = "black";
@@ -340,8 +368,8 @@ export class Point
             if(this.down.left != null && this.down.left.left != null)
             {
                 this.ctx.beginPath();
-                this.ctx.moveTo(this.x, this.y);
-                this.ctx.lineTo(this.down.left.left.x, this.down.left.left.y);
+                this.ctx.moveTo(this.drawX, this.drawY);
+                this.ctx.lineTo(this.down.left.left.drawX, this.down.left.left.drawY);
                 this.ctx.strokeStyle = "yellow";
                 this.ctx.stroke();
                 this.ctx.strokeStyle = "black";
