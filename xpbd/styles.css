@@ -19,11 +19,12 @@ canvas {
 #background {
     position: absolute;
     top: 0;
-    background-color:#87CEEB;
+    background-color:skyblue;
     width: 150vw;
     height: 100vh;
     z-index: -50;
     overflow-x: hidden;
+    filter: brightness(100%);
 }
 
 .oblaci {

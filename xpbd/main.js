@@ -116,27 +116,55 @@ function updateWind(){
 0.5 * rho * CdS * wind[1] * wind[1] / mass, 0.5 * rho * CdS * wind[2] * wind[2] / mass];
 }
 
-let cloudPosition = -300;
+let cloudPosition = -360;
 
 function moveClouds(){
     let wind = document.getElementById("rangeX").value;
     let oblaci = document.getElementsByClassName("oblaci");
 
-    let dt = 0.2;
+    let dt = 0.02;
     for(let oblak of oblaci){
         cloudPosition = cloudPosition + wind * dt
-        if (cloudPosition >= 160){
+        if (cloudPosition >= 100){
             //pomerim za 460 sto je sirina oblaka (400) i dva paddinga (30)
-            cloudPosition = -300;
+            cloudPosition = -360;
         }
 
         oblak.style.left = cloudPosition + "px";
     }
 }
 
-function windAndClouds(){
+function blockSun(){
+    let oblaci = document.getElementsByClassName("oblaci");
+    let sunce = document.getElementById("sunce");
+
+    let rect = sunce.getBoundingClientRect();
+    let sunce_x = rect.left + window.scrollX;
+
+    let preklop = 1000;
+    for (let oblak of oblaci){
+        let rect = oblak.getBoundingClientRect();
+        let oblak_x = rect.left + 100;
+
+        if(Math.abs(sunce_x - oblak_x) < preklop){
+            preklop = Math.abs(sunce_x - oblak_x);
+        }
+    }
+
+    let background = document.getElementById("background");
+    if(preklop < 150){
+        let zatamnjenje = preklop / 3 + 50;
+        background.style.filter = "brightness(" + zatamnjenje + "%)";
+    }
+    else{
+        background.style.filter = "brightness(100%)";
+    }
+}
+
+function weather(){
     updateWind();
     moveClouds();
+    blockSun()
 }
 
 function preSolve(dt, wind)
@@ -319,7 +347,7 @@ function animate(timestamp)
   
     if (deltaTime > dt) 
     {
-        windAndClouds();
+        weather();
 
         previousTime = currentTime - (deltaTime % dt);
 
