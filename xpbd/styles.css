@@ -38,7 +38,6 @@ canvas {
     height: 300px;
     left: -200px;
 }
-
 #sunce {
     position: absolute;
     top: 10px;
@@ -48,12 +47,47 @@ canvas {
     width: 100px;
     height : 100px;
 }
+#sipka {
+    position: absolute;
+    top: 190px;
+    width: 100vw;
+    height: 200px;
+    background-image: url(images/pole3.png);
+    background-repeat: repeat-x;
+}
+#stipaljka1 {
+    position: absolute;
+    left: 550px;
+    top: 170px;
+    width: 300px;
+    height: 300px;
+    background-image: url(images/clothespin2.png);
+    background-repeat: no-repeat;
+}
+#stipaljka2 {
+    position: absolute;
+    left: 1037px;
+    top: 170px;
+    width: 300px;
+    height: 300px;
+    background-image: url(images/clothespin2.png);
+    background-repeat: no-repeat;
+}
+#ram{
+    display:none;
+    position: absolute;
+    top: 100px;
+    width: 100vw;
+    height: 1000px;
+    background-image: url(images/frame.png);
+}
 #trava {
     position: absolute;
     bottom: 0;
     width: 100vw;
     height : 300px;
     background-image: url(images/grass2.png);
+    background-repeat: repeat-x;
 }
 
 .slidecontainer {
@@ -76,12 +110,9 @@ canvas {
     transition: opacity .2s;
     z-index: 2000 !important;
   }
-
-  
   .slider:hover {
     opacity: 1; 
   }
-  
   .slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
@@ -92,7 +123,6 @@ canvas {
     cursor: pointer;
     background-repeat: no-repeat;
   }
-  
   .slider::-moz-range-thumb {
     width: 50px;
     height: 50px;

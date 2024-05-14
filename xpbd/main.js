@@ -85,7 +85,7 @@ const steps = 30;
 const dt = 1000.0 / framesPerSecond;
 
 // External forces
-const g = [0, 9.81 / 1000, 0];
+const g = [0, 9.81 / 500, 0];
 let wind = [0.0, 0.0, 0.0];
 
 function xpbd()
