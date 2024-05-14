@@ -129,6 +129,10 @@ function moveClouds(){
             //pomerim za 460 sto je sirina oblaka (400) i dva paddinga (30)
             cloudPosition = -360;
         }
+        if (cloudPosition < -360){
+            //pomerim za 460 sto je sirina oblaka (400) i dva paddinga (30)
+            cloudPosition = 100;
+        }
 
         oblak.style.left = cloudPosition + "px";
     }

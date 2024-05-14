@@ -2,6 +2,7 @@
 body {
     margin: 0;
     padding: 0;
+    overflow: hidden;
 }
 
 canvas {
@@ -41,7 +42,7 @@ canvas {
 #sunce {
     position: absolute;
     top: 10px;
-    left: 45%;
+    left: 40%;
     background-image: radial-gradient(closest-side, orange, yellow 100%, skyblue);
     z-index: -100;
     width: 100px;
