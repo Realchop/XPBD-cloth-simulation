@@ -85,8 +85,8 @@ const steps = 30;
 const dt = 1000.0 / framesPerSecond;
 
 // External forces
-const g = [0, 9.81/1000, 0];
-const wind = [0.0, 9.81/1000, 7.4/1000];
+const g = [0, 9.81, 0];
+const wind = [20.0, 10.0, 0.0];
 
 function xpbd()
 {
@@ -99,6 +99,13 @@ function xpbd()
     }
 }
 
+//Fw = 1/2 * rho * S * Cd * vw * 2
+const rho = 1.293; //air density
+const CdS = 0.0001; //1cm^2
+const mass = 1
+const windAcc = [0.5 * rho * CdS * wind[0] * wind[0] / mass, 
+0.5 * rho * CdS * wind[1] * wind[1] / mass, 0.5 * rho * CdS * wind[2] * wind[2] / mass]
+
 function preSolve(dt, wind)
 {
     for(let i=0; i < numberOfPoints; ++i)
@@ -107,9 +114,9 @@ function preSolve(dt, wind)
         {
             if(points[i][j].w == 0) continue;
             // vec add
-            points[i][j].velocity.x += wind[0] * dt; 
-            points[i][j].velocity.y += wind[1] * dt; 
-            points[i][j].velocity.z += wind[2] * dt; 
+            points[i][j].velocity.x += windAcc[0] * dt; 
+            points[i][j].velocity.y += windAcc[1] * dt; 
+            points[i][j].velocity.z += windAcc[2] * dt; 
             
             // vec copy
             points[i][j].previous = [points[i][j].x, points[i][j].y, points[i][j].z];
@@ -141,7 +148,7 @@ for(let i=0; i<numberOfPoints; ++i)
             second:points[i][j].down, 
             restingLen: points[i][j].distance(points[i][j].down)});
             
-            // crevno
+            // crveno
             if(points[i][j].down.right != null)
             {
                 bendingEdges.push({

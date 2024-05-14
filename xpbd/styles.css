@@ -16,3 +16,43 @@ canvas {
     top: 10px;
     right: 10px;
 }
+#background {
+    position: absolute;
+    top: 0;
+    background-color:#87CEEB;
+    width: 100vw;
+    height: 100vh;
+    z-index: -50;
+}
+#oblaci {
+    background-image: url(cloud.webp);
+    background-repeat: space;
+    width: 100vw;
+    height: 300px;
+}
+#sunce {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    background-image: radial-gradient(closest-side, orange, yellow 100%, skyblue);
+    z-index: -100;
+    width: 100px;
+    height : 100px;
+}
+#trava {
+    position: absolute;
+    bottom: 0;
+    width: 100vw;
+    height : 300px;
+    background-image: url(grass2.png);
+}
+
+.slidecontainer {
+    width: 30%; /* Width of the outside container */
+  }
+  
+  /* The slider itself */
+  .slider {
+    width: 100%; /* Full-width */
+  }
+  
