@@ -85,8 +85,8 @@ const steps = 30;
 const dt = 1000.0 / framesPerSecond;
 
 // External forces
-const g = [0, 9.81, 0];
-const wind = [20.0, 10.0, 0.0];
+const g = [0, 9.81 / 1000, 0];
+let wind = [0.0, 0.0, 0.0];
 
 function xpbd()
 {
@@ -102,9 +102,42 @@ function xpbd()
 //Fw = 1/2 * rho * S * Cd * vw * 2
 const rho = 1.293; //air density
 const CdS = 0.0001; //1cm^2
-const mass = 1
-const windAcc = [0.5 * rho * CdS * wind[0] * wind[0] / mass, 
-0.5 * rho * CdS * wind[1] * wind[1] / mass, 0.5 * rho * CdS * wind[2] * wind[2] / mass]
+const mass = 0.1
+
+let windAcc = [0, 0, 0];
+function updateWind(){
+    let sliderX = document.getElementById("rangeX");
+    let sliderY = document.getElementById("rangeY");
+    let sliderZ = document.getElementById("rangeZ");
+        
+    wind = [sliderX.value, sliderY.value, sliderZ.value];
+
+    windAcc = [0.5 * rho * CdS * wind[0] * wind[0] / mass, 
+0.5 * rho * CdS * wind[1] * wind[1] / mass, 0.5 * rho * CdS * wind[2] * wind[2] / mass];
+}
+
+let cloudPosition = -300;
+
+function moveClouds(){
+    let wind = document.getElementById("rangeX").value;
+    let oblaci = document.getElementsByClassName("oblaci");
+
+    let dt = 0.2;
+    for(let oblak of oblaci){
+        cloudPosition = cloudPosition + wind * dt
+        if (cloudPosition >= 160){
+            //pomerim za 460 sto je sirina oblaka (400) i dva paddinga (30)
+            cloudPosition = -300;
+        }
+
+        oblak.style.left = cloudPosition + "px";
+    }
+}
+
+function windAndClouds(){
+    updateWind();
+    moveClouds();
+}
 
 function preSolve(dt, wind)
 {
@@ -114,9 +147,9 @@ function preSolve(dt, wind)
         {
             if(points[i][j].w == 0) continue;
             // vec add
-            points[i][j].velocity.x += windAcc[0] * dt; 
-            points[i][j].velocity.y += windAcc[1] * dt; 
-            points[i][j].velocity.z += windAcc[2] * dt; 
+            points[i][j].velocity.x += (windAcc[0] + g[0])* dt; 
+            points[i][j].velocity.y += (windAcc[1] + g[1]) * dt; 
+            points[i][j].velocity.z += (windAcc[2] + g[2]) * dt; 
             
             // vec copy
             points[i][j].previous = [points[i][j].x, points[i][j].y, points[i][j].z];
@@ -286,6 +319,8 @@ function animate(timestamp)
   
     if (deltaTime > dt) 
     {
+        windAndClouds();
+
         previousTime = currentTime - (deltaTime % dt);
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
