@@ -112,8 +112,9 @@ function updateWind(){
         
     wind = [sliderX.value, sliderY.value, sliderZ.value];
 
-    windAcc = [0.5 * rho * CdS * wind[0] * wind[0] / mass, 
-0.5 * rho * CdS * wind[1] * wind[1] / mass, 0.5 * rho * CdS * wind[2] * wind[2] / mass];
+    windAcc = [0.5 * rho * CdS * Math.abs(wind[0]) * wind[0] / mass, 
+            0.5 * rho * CdS * Math.abs(wind[1]) * wind[1] / mass,
+            0.5 * rho * CdS * Math.abs(wind[2]) * wind[2] / mass];
 }
 
 let cloudPosition = -360;
