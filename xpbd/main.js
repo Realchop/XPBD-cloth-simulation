@@ -367,6 +367,7 @@ function animate(timestamp)
             for(const point of row)
             {
                 point.draw(drawPoints, drawConstraints, cameraMatrix, outlineOnly);
+                point.drawSquare();
             }
         }
 

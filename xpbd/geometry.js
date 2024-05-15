@@ -173,7 +173,7 @@ export class Point
         this.velocity.x = 0.0;
         this.velocity.y = 0.0;
         this.velocity.z = 0.0;
-        this.w = 1.0;
+        this.w = 1;
         this.drawX = x;
         this.drawY = y;
         this.drawZ = 0.0;
@@ -381,6 +381,19 @@ export class Point
                 this.ctx.strokeStyle = "black";
             }
         }
+    }
+
+    drawSquare() {
+        if(this.right == null || this.down == null || this.right.down == null){
+            return;
+        }
+        this.ctx.beginPath();
+        this.ctx.moveTo(this.x, this.y);
+        this.ctx.lineTo(this.right.x, this.right.y);
+        this.ctx.lineTo(this.right.down.x, this.right.down.y);
+        this.ctx.lineTo(this.down.x, this.down.y);
+        this.ctx.fillStyle = 'yellow';
+        this.ctx.fill();
     }
 
 }
