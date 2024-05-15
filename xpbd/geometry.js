@@ -388,10 +388,10 @@ export class Point
             return;
         }
         this.ctx.beginPath();
-        this.ctx.moveTo(this.x, this.y);
-        this.ctx.lineTo(this.right.x, this.right.y);
-        this.ctx.lineTo(this.right.down.x, this.right.down.y);
-        this.ctx.lineTo(this.down.x, this.down.y);
+        this.ctx.moveTo(this.drawX, this.drawY);
+        this.ctx.lineTo(this.right.drawX, this.right.drawY);
+        this.ctx.lineTo(this.right.down.drawX, this.right.down.drawY);
+        this.ctx.lineTo(this.down.drawX, this.down.drawY);
         this.ctx.fillStyle = 'yellow';
         this.ctx.fill();
     }

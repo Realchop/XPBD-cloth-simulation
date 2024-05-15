@@ -367,6 +367,13 @@ function animate(timestamp)
             for(const point of row)
             {
                 point.draw(drawPoints, drawConstraints, cameraMatrix, outlineOnly);
+            }
+        }
+        for(const row of points)
+        {
+            for(const point of row)
+            {
+                point.draw(drawPoints, drawConstraints, cameraMatrix, outlineOnly);
                 point.drawSquare();
             }
         }
@@ -532,8 +539,5 @@ for(let i=0; i<controlsDiv.children.length; ++i)
 {
     controlsDiv.children[i].addEventListener("click", controlMapping[i]);
 }
-
-console.log(stretchingEdges.length);
-console.log(bendingEdges.length);
 
 animate();
