@@ -5,15 +5,24 @@ import { Point, geometrySingleton } from "./geometry";
 // Canvas setup
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
-canvas.width = window.innerWidth; 
-canvas.height = window.innerHeight;
+const dpr = window.devicePixelRatio || 1;
+canvas.width = window.innerWidth*dpr; 
+canvas.height = window.innerHeight*dpr;
 
 const numberOfPoints = 40;
 const r = 2; 
-const clothSide = 500;
+const clothSide = 500*dpr;
 const distanceCoef = clothSide/numberOfPoints;
-const startX = (window.innerWidth-(distanceCoef*(numberOfPoints-1)))/2;
-const startY = (window.innerHeight-(distanceCoef*(numberOfPoints-1)))/2;
+const startX = (window.innerWidth*dpr-(distanceCoef*(numberOfPoints-1)))/2;
+const startY = (window.innerHeight*dpr-(distanceCoef*(numberOfPoints-1)))/2;
+
+const stipaljka1 = document.getElementById("stipaljka1");
+const stipaljka2 = document.getElementById("stipaljka2");
+stipaljka1.style.top = stipaljka2.style.top = `${startY/dpr-50}px`;
+stipaljka1.style.left = `${startX/dpr-9}px`;
+stipaljka2.style.left = `${(startX+distanceCoef*(numberOfPoints-1))/dpr-9}px`;
+const sipka = document.getElementById("sipka");
+sipka.style.top = `${startY/dpr-50}px`;
 
 // Inicijalizacija tacaka
 let points = [];

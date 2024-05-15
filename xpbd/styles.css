@@ -17,6 +17,7 @@ canvas {
     top: 10px;
     right: 10px;
 }
+
 #background {
     position: absolute;
     top: 0;
@@ -38,6 +39,7 @@ canvas {
     height: 300px;
     left: -200px;
 }
+
 #sunce {
     position: absolute;
     top: 10px;
@@ -47,6 +49,7 @@ canvas {
     width: 100px;
     height : 100px;
 }
+
 #sipka {
     position: absolute;
     top: 190px;
@@ -55,24 +58,23 @@ canvas {
     background-image: url(images/pole3.png);
     background-repeat: repeat-x;
 }
+
 #stipaljka1 {
     position: absolute;
-    left: 550px;
-    top: 170px;
-    width: 300px;
-    height: 300px;
-    background-image: url(images/clothespin2.png);
+    width: 17px;
+    height: 100px;
+    background-image: url(images/clothespin3.png);
     background-repeat: no-repeat;
 }
+
 #stipaljka2 {
     position: absolute;
-    left: 1037px;
-    top: 170px;
-    width: 300px;
-    height: 300px;
-    background-image: url(images/clothespin2.png);
+    width: 17px;
+    height: 100px;
+    background-image: url(images/clothespin3.png);
     background-repeat: no-repeat;
 }
+
 #ram{
     display:none;
     position: absolute;
@@ -81,6 +83,7 @@ canvas {
     height: 1000px;
     background-image: url(images/frame.png);
 }
+
 #trava {
     position: absolute;
     bottom: 0;
@@ -96,8 +99,9 @@ canvas {
     top: 40%;
     left: 30px;
     font-size: large;
-  }
-  .slider {
+}
+
+.slider {
     position: absolute;
     -webkit-appearance: none;  
     appearance: none;
@@ -109,11 +113,13 @@ canvas {
     -webkit-transition: .2s; 
     transition: opacity .2s;
     z-index: 2000 !important;
-  }
-  .slider:hover {
+}
+
+.slider:hover {
     opacity: 1; 
-  }
-  .slider::-webkit-slider-thumb {
+}
+
+.slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
     width: 50px;
@@ -122,12 +128,13 @@ canvas {
     background: url('images/bug2.png') 5px;
     cursor: pointer;
     background-repeat: no-repeat;
-  }
-  .slider::-moz-range-thumb {
+}
+
+.slider::-moz-range-thumb {
     width: 50px;
     height: 50px;
     border: 0;
     background: url('images/bug2.png') 5px;
     cursor: pointer;
     background-repeat: no-repeat;
-  }
+}
