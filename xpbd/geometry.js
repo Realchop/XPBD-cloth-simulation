@@ -286,28 +286,8 @@ export class Point
         this.z = res[2][0];
     }
 
-    draw(overrideDrawSelf=false, drawConstraints=false, cameraMatrix=null, outline=false) 
+    draw(overrideDrawSelf=false, drawConstraints=false, outline=false) 
     {
-        if(!cameraMatrix)
-            cameraMatrix = [
-                [1, 0, 0, 0],
-                [0, 1, 0, 0],
-                [0, 0, 1, 0],
-                [1, 0, 0, 1],
-            ];
-
-        let current = [
-            [this.x],
-            [this.y],
-            [this.z],
-            [1]
-        ];
-
-        let res = geometrySingleton.matrixMul(cameraMatrix, current);
-        this.drawX = res[0][0];
-        this.drawY = res[1][0];
-        this.drawZ = res[2][0];
-
         if(overrideDrawSelf || this.drawSelf)
         {
             // Posto ne koristimo z, to je implicitna projekcija
@@ -315,6 +295,17 @@ export class Point
             this.ctx.beginPath();
             this.ctx.arc(this.drawX, this.drawY, this.r, 0, Math.PI*2);
             this.ctx.fill();
+        }
+
+        if(this.right != null && this.down != null && this.right.down != null){
+            this.ctx.beginPath();
+            this.ctx.moveTo(this.drawX, this.drawY);
+            this.ctx.lineTo(this.right.drawX, this.right.drawY);
+            this.ctx.lineTo(this.right.down.drawX, this.right.down.drawY);
+            this.ctx.lineTo(this.down.drawX, this.down.drawY);
+            this.ctx.fillStyle = 'yellow';
+            this.ctx.fill();
+            this.ctx.fillStyle = 'black';
         }
 
         if(this.up !== null)
@@ -383,17 +374,27 @@ export class Point
         }
     }
 
-    drawSquare() {
-        if(this.right == null || this.down == null || this.right.down == null){
-            return;
-        }
-        this.ctx.beginPath();
-        this.ctx.moveTo(this.drawX, this.drawY);
-        this.ctx.lineTo(this.right.drawX, this.right.drawY);
-        this.ctx.lineTo(this.right.down.drawX, this.right.down.drawY);
-        this.ctx.lineTo(this.down.drawX, this.down.drawY);
-        this.ctx.fillStyle = 'yellow';
-        this.ctx.fill();
+    updateCamera(cameraMatrix)
+    {
+        if(!cameraMatrix)
+        cameraMatrix = [
+            [1, 0, 0, 0],
+            [0, 1, 0, 0],
+            [0, 0, 1, 0],
+            [1, 0, 0, 1],
+        ];
+
+        let current = [
+            [this.x],
+            [this.y],
+            [this.z],
+            [1]
+        ];
+
+        let res = geometrySingleton.matrixMul(cameraMatrix, current);
+        this.drawX = res[0][0];
+        this.drawY = res[1][0];
+        this.drawZ = res[2][0];
     }
 
 }

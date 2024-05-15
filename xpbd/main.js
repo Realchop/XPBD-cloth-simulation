@@ -77,7 +77,7 @@ let showScreenCenter = false;
 let drawPoints = false;
 let drawConstraints = false;
 let outlineOnly = false;
-let framesPerSecond = 30;
+let framesPerSecond = 60;
 let startTime = performance.now();
 let previousTime = startTime;
 let currentTime = 0;
@@ -375,18 +375,17 @@ function animate(timestamp)
         {
             for(const point of row)
             {
-                point.draw(drawPoints, drawConstraints, cameraMatrix, outlineOnly);
+                point.updateCamera(cameraMatrix);
             }
         }
+
         for(const row of points)
         {
             for(const point of row)
             {
-                point.draw(drawPoints, drawConstraints, cameraMatrix, outlineOnly);
-                point.drawSquare();
+                point.draw(drawPoints, drawConstraints, outlineOnly);
             }
         }
-
     }
 
     // Dodatan info
