@@ -9,7 +9,7 @@ const dpr = window.devicePixelRatio || 1;
 canvas.width = window.innerWidth*dpr; 
 canvas.height = window.innerHeight*dpr;
 
-const numberOfPoints = 40;
+const numberOfPoints = 47;
 const r = 2; 
 const clothSide = 500*dpr;
 const distanceCoef = clothSide/numberOfPoints;
@@ -181,7 +181,7 @@ function weather(){
     blockSun()
 }
 
-function preSolve(dt, wind)
+function preSolve(dt)
 {
     for(let i=0; i < numberOfPoints; ++i)
     {
@@ -262,7 +262,6 @@ function solveStretching(dt)
 {
     const stretchCoef = 1.05;
     const alpha = stretchCoef / dt / dt;
-    const loggingIndex = -1;
     for(let i=0; i<stretchingEdges.length; ++i)
     {
         let firstPoint = stretchingEdges[i].first;
@@ -279,22 +278,17 @@ function solveStretching(dt)
 
         for(let j=0; j<3; ++j) vektorPravca[j] /= edgeLength;
 
-        if(i == loggingIndex)
-            console.log(vektorPravca);
         const restingLen = stretchingEdges[i].restingLen;
         let C = edgeLength - restingLen;
         let s = -C / (w + alpha);
-        // vecAdd(this.pos,id0, this.grads,0, s * w0);
+
         firstPoint.x += vektorPravca[0] * s * firstPoint.w;
         firstPoint.y += vektorPravca[1] * s * firstPoint.w;
         firstPoint.z += vektorPravca[2] * s * firstPoint.w;
-        // vecAdd(this.pos,id1, this.grads,0, -s * w1);
+
         secondPoint.x -= vektorPravca[0] * s * secondPoint.w;
         secondPoint.y -= vektorPravca[1] * s * secondPoint.w;
         secondPoint.z -= vektorPravca[2] * s * secondPoint.w;
-
-        if(i == loggingIndex)
-            console.log(stretchingEdges[i].first.x, stretchingEdges[i].first.y, stretchingEdges[i].first.z, stretchingEdges[i].first.velocity);
     }
 };
 
@@ -302,7 +296,6 @@ function solveBending(dt)
 {
     const bendingCoef = 10.0;
     const alpha = bendingCoef / dt / dt;
-    const loggingIndex = -1;
     for(let i=0; i<bendingEdges.length; ++i)
     {
         let firstPoint = bendingEdges[i].first;
@@ -319,22 +312,17 @@ function solveBending(dt)
 
         for(let j=0; j<3; ++j) vektorPravca[j] /= edgeLength;
 
-        if(i == loggingIndex)
-            console.log(vektorPravca);
         const restingLen = bendingEdges[i].restingLen;
         let C = edgeLength - restingLen;
         let s = -C / (w + alpha);
-        // vecAdd(this.pos,id0, this.grads,0, s * w0);
+
         firstPoint.x += vektorPravca[0] * s * firstPoint.w;
         firstPoint.y += vektorPravca[1] * s * firstPoint.w;
         firstPoint.z += vektorPravca[2] * s * firstPoint.w;
-        // vecAdd(this.pos,id1, this.grads,0, -s * w1);
+
         secondPoint.x -= vektorPravca[0] * s * secondPoint.w;
         secondPoint.y -= vektorPravca[1] * s * secondPoint.w;
         secondPoint.z -= vektorPravca[2] * s * secondPoint.w;
-
-        if(i == loggingIndex)
-            console.log(bendingEdges[i].first.x, bendingEdges[i].first.y, bendingEdges[i].first.z, bendingEdges[i].first.velocity);
     }
 };
 
