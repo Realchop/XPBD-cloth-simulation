@@ -77,7 +77,7 @@ let showScreenCenter = false;
 let drawPoints = false;
 let drawConstraints = false;
 let outlineOnly = false;
-let framesPerSecond = 40;
+let framesPerSecond = 60;
 let startTime = performance.now();
 let previousTime = startTime;
 let currentTime = 0;
@@ -91,7 +91,7 @@ let cameraMatrix = [
 
 // Parametri
 const steps = 15;
-const dt = 10.0 / framesPerSecond;
+const dt = 15.0 / framesPerSecond;
 
 // External forces
 const g = [0, 9.81, 0];

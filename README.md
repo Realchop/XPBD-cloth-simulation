@@ -1,9 +1,6 @@
 # Koraci
 
 1) Skini node
-2) git clone https://github.com/Realchop/mehanika.git
+2) `npm i`
 
-Pokretanje sa `npx vite` iz src foldera
-
-[link](https://threejs.org/examples/?q=cloth#physics_ammo_cloth) ka primeru onoga sto treba da napravimo.   
-
+Pokretanje sa `npx vite` iz xpbd foldera
