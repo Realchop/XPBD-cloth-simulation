@@ -9,7 +9,7 @@ const dpr = window.devicePixelRatio || 1;
 canvas.width = window.innerWidth*dpr; 
 canvas.height = window.innerHeight*dpr;
 
-const numberOfPoints = 47;
+const numberOfPoints = 40;
 const r = 2; 
 const clothSide = 500*dpr;
 const distanceCoef = clothSide/numberOfPoints;
@@ -90,19 +90,18 @@ let cameraMatrix = [
 ]
 
 // Parametri
-const steps = 100;
-const dt = 1000.0 / framesPerSecond;
+const steps = 15;
+const dt = 10.0 / framesPerSecond;
 
 // External forces
 const g = [0, 9.81, 0];
-let wind = [0.0, 0.0, 0.0];
 
 function xpbd()
 {
     let sdt = dt / steps;
     for(let step=0; step < steps; ++step)
     {
-        preSolve(sdt, wind);
+        preSolve(sdt);
         solve(sdt);
         postSolve(sdt);
     }
@@ -111,7 +110,6 @@ function xpbd()
 //Fw = 1/2 * rho * S * Cd * vw ^ 2
 const rho = 1.293; //air density
 const CdS = 0.0001; //1cm^2
-// const mass = 0.001;
 
 let windAcc = [0, 0, 0];
 function updateWind(){
@@ -119,7 +117,7 @@ function updateWind(){
     let sliderY = document.getElementById("rangeY");
     let sliderZ = document.getElementById("rangeZ");
         
-    wind = [sliderX.value, sliderY.value, sliderZ.value];
+    let wind = [sliderX.value, sliderY.value, sliderZ.value];
 
     const w = points[1][0].w;
 
@@ -190,15 +188,12 @@ function preSolve(dt)
         for(let j=0; j < numberOfPoints; ++j)
         {
             if(points[i][j].w == 0) continue;
-            // vec add
             points[i][j].velocity.x += (windAcc[0] + g[0])* dt; 
             points[i][j].velocity.y += (windAcc[1] + g[1]) * dt; 
             points[i][j].velocity.z += (windAcc[2] + g[2]) * dt; 
             
-            // vec copy
             points[i][j].previous = [points[i][j].x, points[i][j].y, points[i][j].z];
     
-            // vec add
             points[i][j].x += points[i][j].velocity.x * dt; 
             points[i][j].y += points[i][j].velocity.y * dt; 
             points[i][j].z += points[i][j].velocity.z * dt; 
@@ -296,7 +291,7 @@ function solveStretching(dt)
 
 function solveBending(dt)
 {
-    const bendingCoef = 20.0;
+    const bendingCoef = 10.0;
     const alpha = bendingCoef / dt / dt;
     for(let i=0; i<bendingEdges.length; ++i)
     {
@@ -335,7 +330,7 @@ function postSolve(dt)
         for(let j=0; j < numberOfPoints; ++j)
         {
             if(points[i][j].w == 0) continue;
-            // vecSetDiff(this.vel,i, this.pos,i, this.prevPos,i, 1.0 / dt);
+
             points[i][j].velocity.x = (points[i][j].x - points[i][j].previous[0]) / dt;
             points[i][j].velocity.y = (points[i][j].y - points[i][j].previous[1]) / dt;
             points[i][j].velocity.z = (points[i][j].z - points[i][j].previous[2]) / dt;
@@ -349,32 +344,26 @@ function animate(timestamp)
     currentTime = timestamp;
     deltaTime = currentTime - previousTime;
   
-    if (deltaTime > dt) 
+    weather();
+
+    previousTime = currentTime - (deltaTime % dt);
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    xpbd();
+    for(const row of points)
     {
-        weather();
-
-        previousTime = currentTime - (deltaTime % dt);
-
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        // rotateX();
-        // rotateY();
-        // rotateZ();
-        xpbd();
-        for(const row of points)
+        for(const point of row)
         {
-            for(const point of row)
-            {
-                point.updateCamera(cameraMatrix);
-            }
+            point.updateCamera(cameraMatrix);
         }
+    }
 
-        for(const row of points)
+    for(const row of points)
+    {
+        for(const point of row)
         {
-            for(const point of row)
-            {
-                point.draw(drawPoints, drawConstraints, outlineOnly);
-            }
+            point.draw(drawPoints, drawConstraints, outlineOnly);
         }
     }
 
