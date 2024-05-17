@@ -1,6 +1,6 @@
 # Koraci
 
 1) Skini node
-2) git clone https://github.com/Realchop/mehanika.git
+2) `npm i`
 
 Pokretanje sa `npx vite` iz xpbd foldera
