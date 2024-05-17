@@ -77,7 +77,7 @@ let showScreenCenter = false;
 let drawPoints = false;
 let drawConstraints = false;
 let outlineOnly = false;
-let framesPerSecond = 60;
+let framesPerSecond = 40;
 let startTime = performance.now();
 let previousTime = startTime;
 let currentTime = 0;
@@ -90,11 +90,11 @@ let cameraMatrix = [
 ]
 
 // Parametri
-const steps = 30;
+const steps = 100;
 const dt = 1000.0 / framesPerSecond;
 
 // External forces
-const g = [0, 9.81 / 500, 0];
+const g = [0, 9.81, 0];
 let wind = [0.0, 0.0, 0.0];
 
 function xpbd()
@@ -108,10 +108,10 @@ function xpbd()
     }
 }
 
-//Fw = 1/2 * rho * S * Cd * vw * 2
+//Fw = 1/2 * rho * S * Cd * vw ^ 2
 const rho = 1.293; //air density
 const CdS = 0.0001; //1cm^2
-const mass = 0.1
+// const mass = 0.001;
 
 let windAcc = [0, 0, 0];
 function updateWind(){
@@ -121,9 +121,11 @@ function updateWind(){
         
     wind = [sliderX.value, sliderY.value, sliderZ.value];
 
-    windAcc = [0.5 * rho * CdS * Math.abs(wind[0]) * wind[0] / mass, 
-            0.5 * rho * CdS * Math.abs(wind[1]) * wind[1] / mass,
-            0.5 * rho * CdS * Math.abs(wind[2]) * wind[2] / mass];
+    const w = points[1][0].w;
+
+    windAcc = [0.5 * rho * CdS * Math.abs(wind[0]) * wind[0] * w, 
+            0.5 * rho * CdS * Math.abs(wind[1]) * wind[1] * w,
+            0.5 * rho * CdS * Math.abs(wind[2]) * wind[2] * w];
 }
 
 let cloudPosition = -360;
@@ -294,7 +296,7 @@ function solveStretching(dt)
 
 function solveBending(dt)
 {
-    const bendingCoef = 10.0;
+    const bendingCoef = 20.0;
     const alpha = bendingCoef / dt / dt;
     for(let i=0; i<bendingEdges.length; ++i)
     {

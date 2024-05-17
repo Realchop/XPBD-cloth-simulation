@@ -173,7 +173,7 @@ export class Point
         this.velocity.x = 0.0;
         this.velocity.y = 0.0;
         this.velocity.z = 0.0;
-        this.w = 1;
+        this.w = 200;
         this.drawX = x;
         this.drawY = y;
         this.drawZ = 0.0;
