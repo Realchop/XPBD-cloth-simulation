@@ -1,6 +1,5 @@
-# Koraci
+# An implementation of XPBD algorithm applied to simulating cloth  
 
-1) Skini node
-2) `npm i`
+You may find the original paper [here](https://matthias-research.github.io/pages/publications/XPBD.pdf)   
 
-Pokretanje sa `npx vite` iz xpbd foldera
+You can run this sim in many ways, the easiest one likely being via `vite` which you can get from `npm`.
